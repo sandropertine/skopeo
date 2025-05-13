@@ -49,20 +49,45 @@ def executar():
         df = extrair_dados_pdf(arquivo)
         if not df.empty:
             st.success("PDF interpretado com sucesso!")
-            st.dataframe(df)
 
-            bimestre = st.selectbox("Bimestre:", ["1_bimestre", "2_bimestre", "3_bimestre", "4_bimestre"])
-            professor = st.text_input("Nome do Professor:")
+            trimestre = st.selectbox("Trimestre:", ["1º Trimestre", "2º Trimestre", "3º Trimestre"])
             disciplina = st.text_input("Disciplina:")
+            professor = st.text_input("Professor:")
+            turma = st.text_input("Turma:")
 
-            if professor and disciplina:
-                pasta_destino = f"dados/{bimestre}"
+            # Proteção contra erro de digitação: "Matemática Lucas" no campo errado
+            partes = disciplina.strip().split()
+            if len(partes) > 1 and not professor:
+                st.warning("Detectado nome duplo na disciplina. Vamos separar automaticamente.")
+                disciplina = " ".join(partes[:-1])
+                professor = partes[-1]
+
+            if professor and disciplina and turma:
+                df["disciplina"] = disciplina.strip()
+                df["professor"] = professor.strip()
+                df["turma"] = turma.strip()
+
+                df_visual = df.rename(columns={
+                    "nome": "Nome do Aluno",
+                    "disciplina": "Disciplina",
+                    "professor": "Professor",
+                    "turma": "Turma",
+                    "nota": "Nota",
+                    "faltas": "Faltas",
+                    "pr1": "PR1",
+                    "rp1": "RP1",
+                    "po1": "PO1",
+                    "situação": "Situação"
+                })
+
+                df_visual = df_visual.sort_values(by=["Nome do Aluno", "Disciplina"])
+                st.dataframe(df_visual.style.format({"Nota": "{:.2f}"}), use_container_width=True)
+
+                pasta_destino = f"dados/{trimestre}"
                 os.makedirs(pasta_destino, exist_ok=True)
                 nome_arquivo = f"{disciplina.lower().replace(' ', '_')}_{professor.lower().replace(' ', '_')}.csv"
                 caminho = os.path.join(pasta_destino, nome_arquivo)
                 df.to_csv(caminho, index=False)
                 st.success(f"Dados salvos em: {caminho}")
-                return df, bimestre
             else:
-                st.warning("Informe o nome do professor e da disciplina.")
-    return None, None
+                st.warning("Informe o nome do professor, da disciplina e da turma.")
