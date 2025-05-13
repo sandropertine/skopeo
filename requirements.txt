@@ -1,6 +1,0 @@
-streamlit
-pandas
-plotly
-fpdf
-typing_extensions
-pymupdf
