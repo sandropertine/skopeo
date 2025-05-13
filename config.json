@@ -1,0 +1,18 @@
+{
+    "email_login": "admin@escola.com",
+    "senha_login": "1234",
+    "nome_escola": "EEB Pedro Maciel",
+    "logo_escola": "logo_escola.png",
+    "logo_escola_path": "logo_escola.png",
+    "endereco": " R. Assis Brasil, 53E - Maria Goretti, Chapecó - SC, 89801-220",
+    "telefone": " (49) 3322-2142",
+    "export_fields": [
+        "Aluno",
+        "Turma",
+        "Trimestre",
+        "Media"
+    ],
+    "diag_aprovado": "Desempenho adequado. Manter acompanhamento regular.",
+    "diag_reforco": "Encaminhar para apoio pedagógico e revisão de conteúdos.",
+    "diag_reprovado": "Plano de recuperação individual. Avaliar causas da dificuldade."
+}
